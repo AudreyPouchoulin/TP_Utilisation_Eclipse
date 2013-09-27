@@ -1,12 +1,11 @@
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
-import org.omg.CORBA.portable.ValueOutputStream;
 
 /**
  * Project: TP_Utilisation_Eclipse
@@ -20,29 +19,46 @@ public class ImagePGM {
 	protected int maxNiveauGris;
 	protected int[][] pixels;
 	
+	/**
+	 * Méthode pour lire une image et la sauver dans un objet "ImagePGM"
+	 * @param pathFile: String
+	 * @throws IOException
+	 */
+	
+	public ImagePGM(){
+		this.largeur = 0;
+		this.hauteur = 0;
+		this.maxNiveauGris = 0;
+	}
+	
 	public void readFile(String pathFile) throws IOException{
 		InputStream ips = null;
 		try {
 			ips = new FileInputStream(pathFile);
 			InputStreamReader ipsr=new InputStreamReader(ips);
 			BufferedReader br=new BufferedReader(ipsr);
-			System.out.println(br.readLine());
-			System.out.println(br.readLine());
+			br.readLine();
+			br.readLine();
 			String ligne = br.readLine();
-			System.out.println(ligne);
-//			this.largeur=ligne.;
-//			this.hauteur=;
-//			this.maxNiveauGris=br.readLine();
-//			
-//			while ((ligne=br.readLine())!=null){
-//				System.out.println(ligne);
-//				chaine+=ligne+"\n";
-//			}
+			StringTokenizer tokenizer = new StringTokenizer(ligne, " ");
+			this.largeur = Integer.parseInt(tokenizer.nextToken());
+			this.hauteur = Integer.parseInt(tokenizer.nextToken());
+			this.pixels = new int[this.largeur][this.hauteur];
+			int i=-1;
+			while ((ligne=br.readLine())!=null){
+				i++;
+				StringTokenizer tokenizer2 = new StringTokenizer(ligne, " ");
+				int j = -1;
+				while(tokenizer2.hasMoreTokens()){
+					j++;
+					pixels[i][j]=Integer.parseInt(tokenizer2.nextToken());
+				}
+			}
 			br.close(); 
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}	
+		}
 	}
 	
 	public void writeFile(){
